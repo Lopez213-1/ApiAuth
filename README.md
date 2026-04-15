@@ -1,6 +1,6 @@
 # API de Gestion de Tareas con JWT
 
-API REST desarrollada en ASP.NET Core que implementa autenticacion con JWT y proteccion de endpoints.
+API REST desarrollada en ASP.NET Core que implementa autenticacion con JWT, proteccion de endpoints y arquitectura en Capas.
 
 ## Funcionalidades 
 
@@ -15,6 +15,14 @@ API REST desarrollada en ASP.NET Core que implementa autenticacion con JWT y pro
 - Entity Framework Core
 - SQL Server
 - JWT
+
+## Arquitectura
+
+API basada en la arquitectura en capas
+
+- Controller: Manejo de Request y Responde
+- Service: Logica de negocio
+- Repository: Acceso a datos
 
 ## Pasos para ejecutar la API
 
