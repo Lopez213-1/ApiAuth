@@ -1,64 +1,65 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskApi.Data;
+using TaskApi.Dtos;
 using TaskApi.Modesl;
+using TaskApi.Services;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class TaskController : ControllerBase
 {
 
-    private readonly AppDbContext _appDbContext;
+    private readonly TaskService _taskService;
 
-    public TaskController(AppDbContext appDbContext)
+    public TaskController(TaskService taskService)
     {
-        _appDbContext = appDbContext;
+        _taskService = taskService;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var tareas = _appDbContext.Tareas.ToList();
+        var tareas = _taskService.GetAll();
         return Ok(tareas);
     }
 
     [HttpPost]
-    public IActionResult Create(Tarea tarea)
+    public IActionResult Create(CreateTareaDto createTareaDto )
     {
-        _appDbContext.Add(tarea);
-        _appDbContext.SaveChanges();
-        return Ok(tarea);
+        _taskService.Create(createTareaDto);
+        return Ok("Tarea creada Correctamente.");
     }
 
     [HttpPut("{id}")]
     public IActionResult Update(int id, Tarea tarea)
     {
-        var tareaExistente = _appDbContext.Tareas.Find(id);
-        if (tareaExistente == null)
+        var tareaExistente = _taskService.Update(id, tarea);
+        if (tareaExistente)
         {
-            return NotFound("Tarea no encontrada");
+
+            return Ok("Tarea Actualizada correctamente.");
         }
 
+        return NotFound("Tarea no encontrada");
 
-        tareaExistente.Titulo = tarea.Titulo;
-        tareaExistente.Completada = tarea.Completada;
-        _appDbContext.SaveChanges();
-        return Ok(tareaExistente);
+
+
+
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var tarea = _appDbContext.Tareas.Find(id);
-        if (tarea == null)
+        var tarea = _taskService.Delete(id);
+        if (tarea)
         {
-            return NotFound("Tarea no encontrada");
+            return Ok("Tarea eliminada Correctamente");
         }
 
+        return NotFound("Tarea no encontrada");
 
-        _appDbContext.Tareas.Remove(tarea);
-        _appDbContext.SaveChanges();
-        return Ok("Tarea eliminada");
+
     }
 
 }
