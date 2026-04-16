@@ -13,10 +13,25 @@ namespace TaskApi.Services
             _taskRepository = taskRepository;
         }
 
-        public List<Tarea> GetAll()
+        public List<GetAllDto> GetAll()
         {
             var tareas = _taskRepository.GetAll();
-            return tareas;
+            var resultado = new List<GetAllDto>();
+
+            foreach(var task in tareas)
+            {
+                var dto = new GetAllDto
+                {
+                    Id = task.Id,
+                    Titulo = task.Titulo,
+                    Completada = task.Completada,
+                    UserId = task.UserId
+                };
+
+                resultado.Add(dto);
+            }
+
+            return resultado;
         }
 
         public void Create(CreateTareaDto createTareaDto)
@@ -30,7 +45,7 @@ namespace TaskApi.Services
             _taskRepository.Create(tarea);
         }
 
-        public bool Update(int id, Tarea tarea)
+        public bool Update(int id, UpdateTareaDto updateTareaDto )
         {
             var task = _taskRepository.GetById(id);
             if (task is null)
@@ -38,8 +53,8 @@ namespace TaskApi.Services
                 return false;
             }
 
-            task.Titulo = tarea.Titulo;
-            task.Completada = tarea.Completada;
+            task.Titulo = updateTareaDto.Titulo;
+            task.Completada = updateTareaDto.Completada;
             _taskRepository.Update(task);
             return true;
 
