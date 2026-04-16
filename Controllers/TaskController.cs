@@ -32,9 +32,9 @@ public class TaskController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, Tarea tarea)
+    public IActionResult Update(int id, UpdateTareaDto updateTareaDto)
     {
-        var tareaExistente = _taskService.Update(id, tarea);
+        var tareaExistente = _taskService.Update(id, updateTareaDto);
         if (tareaExistente)
         {
 
